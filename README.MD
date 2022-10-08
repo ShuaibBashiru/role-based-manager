@@ -36,7 +36,7 @@ Check the root folder
 
 **Admin**
 
-![Admin](screenshots/admin.png)
+![Admin](screenshots/record.png)
 
 **Role**
 
