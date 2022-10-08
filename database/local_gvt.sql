@@ -1,0 +1,20 @@
+CREATE TABLE local_govt(
+  id int NOT NULL AUTO_INCREMENT,
+  lga_name varchar(100) NOT NULL,
+  country_id INT NOT NULL DEFAULT 0,
+  state_id INT NOT NULL DEFAULT 0,
+  city_id INT NOT NULL DEFAULT 0,
+  status_id int NOT NULL DEFAULT 1,
+  generated_id varchar(80) NOT NULL UNIQUE DEFAULT '0',
+  created_by int NOT NULL DEFAULT 0,
+  modified_by int NOT NULL DEFAULT 0,
+  date_created date NOT NULL,
+  time_created time NOT NULL,
+  updated_at TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  deleted_status INT NOT NULL DEFAULT 0,
+  deleted_by INT NOT NULL DEFAULT 0,
+  PRIMARY KEY(id),
+  FOREIGN KEY (country_id) REFERENCES countries(id),
+  FOREIGN KEY (state_id) REFERENCES states(id),
+  FOREIGN KEY (city_id) REFERENCES cities(id)
+);

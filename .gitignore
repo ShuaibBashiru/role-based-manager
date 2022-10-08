@@ -1,0 +1,15 @@
+user/node_modules
+user/public/hot
+user/public/storage
+user/storage/*.key
+user/vendor
+user/.env
+user/.env.backup
+user/.phpunit.result.cache
+user/docker-compose.override.yml
+user/Homestead.json
+user/Homestead.yaml
+user/npm-debug.log
+yarn-error.log
+/.idea
+/.vscode
