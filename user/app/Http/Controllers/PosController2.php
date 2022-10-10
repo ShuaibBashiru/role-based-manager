@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\PointOfSales;
+use App\Models\PointOfSales2;
 use Illuminate\Http\Request;
 use App\Http\Resources\ToJsonResource;
 use Illuminate\Http\File;
@@ -12,39 +12,15 @@ use PDF;
 class PosController2 extends Controller
 {
     
-    public function manage($id){
-        $cookie_name = "manageUser";
-        $cookie_value = $id;
-        $id = base64_decode(base64_decode($id));
-        setcookie($cookie_name, $cookie_value, time() + (86400), "/");
-        $record = $this->record($id);
-        if ($record['status']=='success') {
-            $record = $record['info'];
-            return view('apps.pos.manage', compact('record'));
-        }else{
-            $message = json_encode("No record found");
-            return redirect()->route('list_pos')->with('message', json_encode($message));
-        }
-    }
 
     public function list(){
-        return view('apps.pos.record');
+        return view('apps.pos2.record');
     }
 
     public function portal(){
-        return view('apps.pos.portal');
+        return view('apps.pos2.portal');
     }
 
-    public function checkIfIdIsValid($data){
-        $query = PointOfSales2::where('deleted_status', '=', '0')
-                                    ->where('personal_id', '=', $data['personal_id'])
-                                    ->get()->first();
-        if($query){
-            return true;
-        }else{
-            return false;
-        }
-    }
 
     public function getSummary($id){
         $query = PointOfSales2::from('vw_sales_record_2')->where('invoice_number', '=', $id)
@@ -73,8 +49,7 @@ class PosController2 extends Controller
         $summary = $this->getSummary($id);
         $query = PointOfSales2::from('sales_records_2 as t1')
                     ->where('t1.invoice_number', '=', $id)
-                    ->leftJoin('sales_items as t2', 't2.id', '=', 't1.item_id')
-                    ->get(['t1.*', 't2.item_name']);
+                    ->get(['t1.*']);
 
         if (count($query)>0) {
             $returnData = [
@@ -116,8 +91,7 @@ class PosController2 extends Controller
 
     public function allSales(){
         $query = PointOfSales2::from('sales_records_2 as t1')
-                    ->leftJoin('sales_items as t2', 't2.id', '=', 't1.item_id')
-                    ->get(['t1.*', 't2.item_name']);
+                    ->get(['t1.*']);
         if($query){
             $data=[
                 'status'=> true,
@@ -183,17 +157,6 @@ class PosController2 extends Controller
         }
     }
 
-    public function checkIfRecordExist($data){
-        $query = PointOfSales2::where('deleted_status', '=', '0')
-                                    ->where('item_id', '=', $data['item_id'])
-                                    ->get()->first();
-        if($query){
-            return true;                
-        }else{
-            return false;
-        }
-    }
-
         public function create(Request $request){
             try {
                 $records = 0;
@@ -210,7 +173,7 @@ class PosController2 extends Controller
                 $d = new dateTime();
                 $record = [
                     "qty" => '',
-                    "item_id" => '',
+                    "item_name" => '',
                     "unit_price" => '',
                     "amount" => '',
                     "invoice_number" => $request->input('invoice_number'),
@@ -225,7 +188,7 @@ class PosController2 extends Controller
                     "updated_at" => $d->format("Y-m-d h:i:s"),
                 ];
             foreach ($item_ids as $item_id) {
-                $record['item_id'] = $item_ids[$count];
+                $record['item_name'] = $item_ids[$count];
                 $record['qty'] = $qtys[$count];
                 $record['unit_price'] = $unit_prices[$count];
                 $record['amount'] = $unit_prices[$count] * $qtys[$count];

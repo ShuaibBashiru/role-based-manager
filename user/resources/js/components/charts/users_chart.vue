@@ -24,7 +24,7 @@
         <div class="collapse" id="drop3">
         <ul class="btn-toggle-nav ms-2 list-unstyled fw-normal pb-1 small">
         <li class="p-1">
-           <select v-model="selectedYear" class="form-control shadow-none" @change="plotChart">
+           <select v-model="parameters.year" class="form-control shadow-none" @change="plotChart">
                 <option value="" selected>Select</option>
                 <option v-for="(d, index) in years" :value="d" :key="index" v-text="'Year '+d"></option>
             </select>
@@ -48,28 +48,35 @@
         <div class="border rounded-3 p-1 pt-0 pb-0 m-0">
       <div class="row border-bottom m-0 p-0 pb-1 pt-1">
               <div class="col-md-8">
-            <h6 class="m-0 pt-2 pb-2" v-text="chartOptions.summary.header +' ('+selectedYear+')'"></h6> 
+            <h6 class="m-0 pt-2 pb-2" v-text="chartOptions.summary.header +' ('+parameters.year+')'"></h6> 
           </div>
               <div class="col-md-4">
-                <h6 class="m-0 pt-2 pb-2 float-end"> <span class="">Total in <span class="fs-6" v-text="selectedYear"></span>: </span> <span class="fs-6" v-text="selectionTotal"></span> </h6>
+                <h6 class="m-0 pt-2 pb-2 float-end"> <span class="">Total users in <span class="fs-6" v-text="parameters.year"></span>: </span> <span class="fs-6" v-text="selectionTotal"></span> </h6>
               </div>
       </div>
+
       <div class="row overflow-hidden m-0 mt-2 mb-2">
         <div class="col-md-12">
+           <section v-if="info.length > 0">
             <GChart class="chart" 
-            type="ColumnChart" 
-            :data="chartSummary" 
-            :resizeDebounce="500"
-            :options="chartOptions.summary" />
+              type="ColumnChart" 
+              :data="chartSummary" 
+              :resizeDebounce="500"
+              :options="chartOptions.summary" />
+           </section>
+           <section v-else>
+            <p class="text-center text-white blinker">Fetching...</p>
+           </section>
         </div>
       </div>
+
     </div>
     </div>
       <div class="col-md-4 mt-2">
         <div class="border rounded-3 p-1 pt-0 pb-0">
              <div class="row border-bottom m-0 p-0 pb-1 pt-1">
                   <div class="col-md-10">
-            <h6 class="m-0 pt-2 pb-2" v-text="chartOptions.gender.header +' ('+selectedYear+')'"></h6> 
+            <h6 class="m-0 pt-2 pb-2" v-text="chartOptions.gender.header +' ('+parameters.year+')'"></h6> 
           </div>
               <div class="col-md-2">
               </div>
@@ -117,7 +124,12 @@ export default {
         errors: [],
         selectionTotal: 0,
         years: [],
-        selectedYear: '',
+        parameters:{
+            year: '',
+            month: '',
+            day: '',
+        },
+        todayDate: '',
         todayDate: '',
         chartSummary: [],
         chartGender: [],
@@ -167,7 +179,7 @@ export default {
    getDateInfo: function(){
       var d = new Date();
       this.todayDate = d.getFullYear() + '-' + d.getMonth() + '-' +d.getDay();
-      this.selectedYear = d.getFullYear();
+      this.parameters.year = d.getFullYear();
     },
  getRecords: function(){
         this.button='Loading...';
@@ -212,13 +224,26 @@ export default {
   },
 
   plotChart: function(){
+      this.getDateInfo();
       this.getColumns();
       this.summaryPlot();
       this.genderPlot();
     },
+
+    getDateInfo: function(){
+      var d = new Date();
+      var m = d.getMonth().toString().length === 1?  d.getMonth()+1 : d.getMonth();
+      var month = m.toString().length===1? '0'+m.toString() : m.toString();
+      var day = d.getDate().toString().length===1? '0'+d.getDate().toString() : d.getDate().toString()
+      this.todayDate = d.getFullYear() + '-' + month + '-' +day;
+      this.parameters.year = d.getFullYear()
+      this.parameters.month = month
+      this.parameters.day = day
+    },
+
   getColumns: function(){
-    if (this.selectedYear=='') {
-        this.selectedYear = new Date().getFullYear();
+    if (this.parameters.year=='') {
+        this.parameters.year = new Date().getFullYear();
     }else{
       this.years = [];
       const years = _.groupBy(this.info, info => info.date_created.substring(0, 4));
@@ -259,7 +284,7 @@ export default {
       this.chartOptions.gender.title = "Genders";
         var male = 0;
         var female = 0;
-        var data = this.sortData(this.selectedYear);
+        var data = this.sortData(this.parameters.year);
         for (let index = 0; index < data.length; index++) {
               male += data[index].gender_id=='Male'? 1 : 0;
               female += data[index].gender_id=='Female'? 1 : 0;
@@ -273,7 +298,7 @@ export default {
     this.selectionTotal = 0;
     this.chartSummary.push(['Year', 'New', 'Active', 'Blocked']);
     this.chartOptions.summary.title = "New, Active and blocked";
-          var data = this.sortData(this.selectedYear);
+          var data = this.sortData(this.parameters.year);
           const grouped = _.groupBy(data, info => info.date_created.substring(5, 7));
           for (var key in grouped){
           var active = 0;

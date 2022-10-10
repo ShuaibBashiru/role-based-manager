@@ -2,7 +2,7 @@
 <div class="">
     <b-overlay class="position-fixed w-100 h-100" :show="showOverlay" no-wrap spinner-variant="primary" rounded="sm" spinner-type="border" z-index="999999" />
     <notification :alertTitle="alertTitle" :alertMsg="alertMsg" />  
-    <printinvoice :invoice_id="invoice_id" />  
+    <printinvoice2 :invoice_id="invoice_id" />  
 <div class="container-fluid">
     <server-alert :server_message="server_message" />
     <a href="#" id="topLink"></a>
@@ -67,7 +67,7 @@
         </div>
     </div>
        <div class="col-md-3">
-        <span class="float-end" v-text="'Total: '+ formatter(parameters.totalPrice)"></span>
+        <span class="float-end" v-text="'Total: '+ valueConverter(parameters.totalPrice)"></span>
     </div>
 </div>
     <div class="row mt-1">
@@ -77,36 +77,28 @@
         <thead>
         <tr>
             <th scope="col" class="text-truncate" title="">Item </th>
-            <th scope="col" class="text-truncate" title="">Unit price </th>
-            <th scope="col" class="text-truncate" title="">Qty </th>
             <th scope="col" class="text-truncate" title="">Amount </th>
-            <th scope="col" class="text-truncate text-center" title="">Remove</th>
        </tr>
         </thead>
         <tbody id="items"> 
         <tr id="product-item0" class="product-item">
         <td class="col-5 text-center">
-        <!-- <select class="form-control shadow-none itemName change" name="itemName" @change="calCulateOnChange(0)" id="0">
-                <option value="" selected>Select</option>
-                <option v-for="(d, index) in info" :value="index" :key="index" v-text="d.item_name"></option>
-            </select> -->
-           <input list="icons" class="form-control shadow-none change itemName" name="itemName" @change="calCulateOnChange(0)" id="0" data-id="" placeholder="Pick item">
-            <datalist id="icons">
-                <option v-for="(d, index) in info" :value="d.item_name" :key="index" v-text="d.item_name"></option>
-            </datalist>
-
+        <select class="form-control shadow-none itemName change" name="itemName" id="0">
+                <option value="Food" selected>Food</option>
+        </select>
             </td>
             <td class="col-2 text-center">
-               <input type="number" name="unitPrice" readonly id="0" class="shadow-none unitPrice form-control form-control-md form-control-sm-lg" min="50">
+            <input type="text" name="amount" id="0" placeholder="Enter Food price" class="shadow-none form-control amount form-control-md form-control-sm-lg" value="" @input="calculate">
             </td>
-            <td class="col-1 text-center">
-            <input type="number" name="qty" id="0" @input="calCulateOnChange(0)" class="shadow-none form-control qty form-control-md inputs form-control-sm-lg" min="1" max="1000" value="1">
+        </tr>
+        <tr id="product-item1" class="product-item">
+        <td class="col-5 text-center">
+        <select class="form-control shadow-none itemName change" name="itemName" id="1">
+                <option value="Drink" selected>Drink</option>
+        </select>
             </td>
             <td class="col-2 text-center">
-            <input type="text" name="amount" id="0" class="shadow-none form-control amount form-control-md form-control-sm-lg" value="0" readonly>
-            </td>
-            <td class="col-1 text-center btnHolder"> 
-            <button class="btn btn-danger removalBtn" id="removalBtn" value="0" @click="removeItem($event)"> - </button>
+            <input type="text" name="amount" id="1" placeholder="Enter Drink price" class="shadow-none form-control amount form-control-md form-control-sm-lg" value="" @input="calculate">
             </td>
         </tr>
         </tbody>
@@ -115,7 +107,7 @@
 
     <div class="row m-0 mt-2">
         <div class="col-md-3 ps-0">
-        <button class="btn btn-info shadow-none float-start" @click="addItem"><i class="bi bi-plus"></i> Add item</button>
+        <button class="btn btn-info shadow-none float-start" @click="clear"><i class="bi bi-trash"></i>Clear</button>
         </div>
         <div class="col-md-6"> <p v-html="errorResponse" class="text-danger text-center"></p></div>
         <div class="col-md-3 pe-0">
@@ -138,7 +130,7 @@
 <script>
 import appsettings from '../json/myapp.json'
 export default {
-    name: 'pointOfSale',
+    name: 'pointOfSale2',
     props: ['server_message'],
     data (){
         return{
@@ -217,7 +209,6 @@ export default {
     },
 
     created(){
-    this.getLists();
     },
 
     computed:{
@@ -234,133 +225,29 @@ export default {
             this.disabled = false
    },
 
-    formatter: function(amount){
+    valueConverter: function(amount){
         var formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'NGN',
         })
         return formatter.format(amount);
     },
-    getItemInfo: function(itemName){
-        const item = [];
-        for (let i = 0; i < this.info.length; i++) {
-        if (
-            this.info[i].item_name.toString().toLowerCase().search(itemName.toString().toLowerCase())!=-1
-            ){
-        item.push(this.info[i]);
-        }
-        }
-        return item;
-    },
-    calCulateOnChange: function(index){
-        var position = parseInt(index);
-        var getItemElement = document.getElementById('product-item'+position).id;
-        var itemName = $('#'+getItemElement+' .itemName').val();
-        var itemInfo = this.getItemInfo(itemName)
-        var qty = $('#'+getItemElement+ ' .qty').val();
-        var amount = '';
-        var unitPrice = itemInfo[0]? itemInfo[0].unit_price:'';
-        if(unitPrice==='' || itemName===''){
-            this.calculate();
-            return false;
-        }else{
-            amount = unitPrice * parseInt(qty)
-            $('#'+getItemElement+ ' .unitPrice').val(unitPrice ? unitPrice : 0)
-            $('#'+getItemElement+ ' .amount').val(amount ? amount : 0)
-            $('#'+getItemElement+ ' .itemName').val(itemInfo[0] ? itemInfo[0].item_name : '')
-            this.errorResponse = '';
-            this.calculate();
-            return true;
-        }
-    },
-    validateInput: function(position){
-        var getItemElement = document.getElementById('product-item'+position).id;
-        var itemName = $('#'+getItemElement+' .itemName').val();
-        var qty = $('#'+getItemElement+ ' .qty').val();
-        var unitPrice = $('#'+getItemElement+ ' .unitPrice').val();
-        var amount = $('#'+getItemElement+ ' .amount').val();
-        if(itemName=='' || qty == 0 || qty == '' || unitPrice == 0 || unitPrice == '' || amount == 0 || amount == ''){
-            return false;
-        }else{
-            return true;
-        }
-    },
 
-    addItem: function(e) {
-        var last = this.indexes.slice(-1)
-        if (!this.validateInput(parseInt(last))) {
-            this.errorResponse= "Kindly fill the above input(s)";
-        }else{
-        this.errorResponse= "";
-        var newindex = parseInt(last) + 1;
-        this.indexes.push(newindex)
-        // Clone item and assign individual id
-        $('.product-item:last').clone(true).insertAfter('.product-item:last');
-        $('.product-item:last').attr('id', 'product-item'+newindex);
-        $('.product-item:last .unitPrice').attr('id', newindex);
-        $('.product-item:last .qty').attr('id', newindex);
-        $('.product-item:last .amount').attr('id', newindex);
-        $('.removalBtn:last').attr('value', newindex);
-        // Reset cloned input to default values
-        $('.product-item:last .itemName').val('');
-        $('.product-item:last .unitPrice').val(0);
-        $('.product-item:last .amount').val(0);
-        $('.product-item:last .qty').val(1);
-        this.lastid = parseInt(newindex)
-        // Select element with event and add their respective EventListener to inputs
-        const items = document.querySelectorAll('.product-item button');
-        // Key up event for qty and price
-        const onchanges = document.querySelectorAll('.change');
-        const inputs = document.querySelectorAll('.inputs');
-        for (const item of items) {
-        item.addEventListener('click', this.removeItem);
-        }
-        var position = 0;
-        for (const change of onchanges) {
-            change.addEventListener("change", this.calCulateOnChange.bind(null, position), false);
-            position += 1;
-        }
-        var keyIndex = 0;
-        for (const input of inputs) {
-            input.addEventListener("input", this.calCulateOnChange.bind(null, keyIndex), false);
-            keyIndex += 1;
-        }
-        
-        }
-    },
-
-    removeItem: function(e) {
-        this.errorResponse= "";
-        var id = e.target.value;
-        if(id==0) {
-            this.errorResponse = "You cannot remove the first item";
-            return false;
-        }else{
-            $('#product-item'+id).remove();
-            this.indexes.pop();
-            var itemPosition = 0;
-            // Iterate over the element and sort ids
-            const items = document.querySelectorAll('.product-item');
-            for (const item of items) {
-                $('#'+item.id).attr('id', 'product-item'+itemPosition);
-                $('#'+item.id+' button').attr('value', itemPosition);
-                itemPosition += 1;
-                }
-            this.calculate();
-            }
+    clear: function(){
+        $('.product-item .amount').val('');
+        this.indexes = [];
+        this.indexes.push(0);
+        this.errorResponse = '';
+        this.parameters.totalPrice = '';
+        this.parameters.amountPaid = '';
+        this.parameters.payment_type = '';
+        this.disabled = false;
+        this.alertMsg='';
+        $("#alertPrimary").toast('hide')
     },
 
     neworder: function(){
-        for(var key in this.indexes){
-            var id = this.indexes[key]
-            if (id!=0) {
-            $('#product-item'+id).remove();
-            }else{
-                $('.product-item select').val('');
-                $('.product-item .unitPrice, .amount').val(0);
-                $('.product-item .qty').val(1);
-            }
-        }
+        $('.product-item .amount').val('');
         this.indexes = [];
         this.indexes.push(0);
         this.parameters.invoice_number = Date.now();
@@ -374,17 +261,15 @@ export default {
     },
 
     validateAllInput: function(){
-        const items = document.querySelectorAll('.product-item button');
+        const items = document.querySelectorAll('.product-item');
         var counter = 0;
         var validInput = 0;
         for (const item of items) {
         var position = counter;
         var getItemElement = document.getElementById('product-item'+position).id;
         var itemName = $('#'+getItemElement+' .itemName').val();
-        var qty = $('#'+getItemElement+ ' .qty').val();
-        var unitPrice = $('#'+getItemElement+ ' .unitPrice').val();
         var amount = $('#'+getItemElement+ ' .amount').val();
-        if(itemName=='' || qty == 0 || qty == '' || unitPrice == 0 || unitPrice == '' || amount == 0 || amount == ''){
+        if(itemName=='' || amount == 0 || amount == ''){
             validInput -= 1;
         }else{
             validInput += 1;
@@ -404,17 +289,14 @@ export default {
         var qty = [];
         var unit_price = [];
         var itemNames = document.getElementsByName('itemName');
-        var get_prices = document.getElementsByName('unitPrice');
-        var get_qty = document.getElementsByName('qty');
-        var qtyByUnitPrice = '';
         var totalPrice = 0;
         for (let index = 0; index < itemNames.length; index++) {
-            var itemInfo = this.getItemInfo(itemNames[index].value)
-            item_id.push(itemInfo ? parseInt(itemInfo[0].id) : 0)
-            unit_price.push(get_prices[index].value);    
-            qty.push(get_qty[index].value);
-            qtyByUnitPrice = parseFloat(get_prices[index].value * parseInt(get_qty[index].value))
-            var amount = qtyByUnitPrice ? qtyByUnitPrice : 0;
+            qty.push(1);
+            var amount = $('#product-item'+index+ ' .amount').val()
+            var itemName = $('#product-item'+index+ ' .itemName').val()
+            item_id.push(itemName)
+            amount = amount? amount : 0
+            unit_price.push(amount);
             totalPrice += parseFloat(amount);
         }
         this.parameters.totalPrice = totalPrice;
@@ -422,7 +304,6 @@ export default {
         this.parameters.item_id = item_id
         this.parameters.unit_price = unit_price
         this.parameters.qty = qty
-
         },
 
 
@@ -449,7 +330,7 @@ export default {
         for (var key in this.parameters){
         form.append(key, this.parameters[key])
         }
-    axios.post('/pos/create', form).then(response => {
+    axios.post('/pos2/create', form).then(response => {
         this.button=this.btntxt;
         this.showOverlay=false;
         this.errors = '';
@@ -486,44 +367,6 @@ export default {
         }
         })
     },
-
-    getLists: function(){
-        $(".toaster").toast('hide')
-        this.showOverlay=true;
-        this.search = ''
-        axios.get('/salesitems/list', {params:this.parameters}).then(response => {
-            this.button=this.btntxt;
-            this.showOverlay=false;
-            this.errors = '';
-            if((response.status != undefined && response.status==200) && (response['data'].data.status==response['data'].data.statusmsg)){
-            this.info = response['data'].data.info
-            }else if(response['data'].data.status=='norecord'){
-            this.info = ''
-            this.alertMsg=''
-            }else{
-            this.alertMsg=response['data'].data.msg;
-            $("#alertDanger").toast('show')
-            }
-        }).catch(error => {
-                this.showOverlay=false;
-                this.errors = '';
-            if(error.response != undefined && error.response.status==422){
-                this.errors = error.response.data.errors;
-                this.alertMsg='Something went wrong! Kindly confirm and correct the error(s) before you continue.'
-            $("#alertDanger").toast('show')
-            } else if(error.response != undefined && error.response.status==419){
-                this.alertMsg='This page has been inactive for long, Kindly refresh and try again.';
-            $("#alertDanger").toast('show')
-            }else if(error.response != undefined && error.response.status==500){
-                this.alertMsg='Internal server error! Please refresh and try again or report this error.';
-            $("#alertDanger").toast('show')
-            }else{
-                this.alertMsg='Access restricted or Network error! Please refresh and try again or report this error.';
-            $("#alertDanger").toast('show')
-            }
-        })
-    },
-
 
     },
 

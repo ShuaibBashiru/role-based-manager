@@ -32,7 +32,7 @@
         <div class="">
                  <div class="text-center">
                      <figure>
-                     <img :src="userProfilePassport" class="rounded-circle" style="width:80px; height:80x;" alt="Passport">
+                     <img :src="userProfilePassport" class="rounded-circle" height="120" width="120" alt="Passport">
                     <figcaption class="mt-1 text-success" role="button" data-bs-toggle="modal" data-bs-target="#UserPassportModal"> <u>Change</u> </figcaption>
                     </figure>
                 </div>
@@ -317,7 +317,7 @@ export default {
         search: '',
         checks: [],
         statuses: [],
-        userProfilePassport: '/assets/passports/avatar.png',
+        userProfilePassport: '/assets/icons/avatar.png',
         parameters:{
             personal_id: '',
             id: '',

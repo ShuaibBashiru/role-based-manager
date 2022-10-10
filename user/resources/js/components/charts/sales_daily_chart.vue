@@ -6,7 +6,7 @@
         <div class="border rounded-3 p-1 pt-0 pb-0">
           <div class="row m-0 p-0 pb-1 pt-1">
               <div class="col-md-6">
-            <h6 class="m-0 pt-2" v-text="chartOptions.chartTitle + ' - ' +todayDate"></h6> 
+            <h6 class="m-0 pt-2" v-text="chartOptions.chartTitle"></h6> 
           </div>
               <div class="col-md-6 pe-0 dropdown">
             <button class="btn btn-primary float-end pt-1 pb-1" data-bs-toggle="dropdown" aria-expanded="false">Actions</button> 
@@ -21,7 +21,7 @@
         <div class="collapse" id="drop3">
         <ul class="btn-toggle-nav ms-2 list-unstyled fw-normal pb-1 small">
         <li class="p-1">
-           <select v-model="selectedYear" class="form-control shadow-none" @change="plotChart">
+           <select v-model="parameters.year" class="form-control shadow-none" @change="plotChart">
                 <option value="" selected>Select</option>
                 <option v-for="(d, index) in years" :value="d" :key="index" v-text="'Year '+d"></option>
             </select>
@@ -50,9 +50,9 @@
       </div>
       <div class="row overflow-hidden m-0 mt-2 mb-2">
         <div class="col-md-12">
-              <h4 class="mt-4"> <span class="" v-text="formatter(totalPrice)"></span> <br/> <small class="fs-6">YTD</small> </h4>
+          <h4 class="mt-4"> <span class="" v-text="valueConverter(totalPrice)"></span> <br/> <small class="fs-6">Today</small> </h4>
               <hr>
-              <h4 class="mt-4"> <span class="" v-text="totalItems"></span> <br/> <small class="fs-6">Total item orders</small> </h4>
+          <h4 class="mt-4"> <span class="" v-text="totalItems"></span> <br/> <small class="fs-6">Total orders</small> </h4>
     </div>
     </div>
     </div>
@@ -62,7 +62,7 @@
         <div class="border rounded-3 p-1 pt-0 pb-0 m-0">
       <div class="row border-bottom m-0 p-0 pb-1 pt-1">
               <div class="col-md-8">
-            <h6 class="m-0 pt-2 pb-2" v-text="chartOptions.dailyFLows.header +' ('+selectedYear+')'"></h6> 
+            <h6 class="m-0 pt-2 pb-2" v-text="chartOptions.dailyFLows.header + ' ' +months[parameters.month]"></h6> 
           </div>
               <div class="col-md-4">
               </div>
@@ -70,19 +70,21 @@
 
       <div class="row overflow-hidden m-0 mt-2 mb-2">
         <div class="col-md-12">
+           <section v-if="info.length > 0">
             <GChart class="chart" 
-            type="LineChart" 
-            :data="chartDailyFLows" 
-            :resizeDebounce="500"
-            :options="chartOptions.dailyFLows" />
+              type="ColumnChart" 
+              :data="chartDailyFLows" 
+              :resizeDebounce="500"
+              :options="chartOptions.dailyFLows" />
+           </section>
+           <section v-else>
+            <p class="text-center text-white blinker">Fetching...</p>
+           </section>
         </div>
       </div>
     </div>
     </div>
   </div>
-
-    <hr class="border border-3 border-primary"/>
-
 </div>
 </template>
 <style scoped>
@@ -115,7 +117,11 @@ export default {
         errors: [],
         selectionTotal: 0,
         years: [],
-        selectedYear: '',
+        parameters:{
+            year: '',
+            month: '',
+            day: '',
+        },
         todayDate: '',
         totalPrice: 0,
         counter: 0,
@@ -124,7 +130,7 @@ export default {
         chartItemFLows: [],
         chartDailyFLows: [],
         chartOptions: {
-        chartTitle: "Sales Report",
+        chartTitle: "This Month Report",
         summary: {
           header: 'Summary in Year',
           title: '',
@@ -134,7 +140,7 @@ export default {
 
         },
         dailyFLows: {
-          header: 'Today',
+          header: 'Daily flow in',
           title: '',
           is3D: true,
           stacked: false,
@@ -151,7 +157,7 @@ export default {
 
         },
          total: {
-          header: 'Invoiced',
+          header: "Today's Invoiced",
           title: '',
           is3D: true,
           stacked: false,
@@ -190,9 +196,11 @@ export default {
       var month = m.toString().length===1? '0'+m.toString() : m.toString();
       var day = d.getDate().toString().length===1? '0'+d.getDate().toString() : d.getDate().toString()
       this.todayDate = d.getFullYear() + '-' + month + '-' +day;
-      this.selectedYear = d.getFullYear();
+      this.parameters.year = d.getFullYear()
+      this.parameters.month = month
+      this.parameters.day = day
     },
-      formatter: function(amount){
+      valueConverter: function(amount){
         var formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'NGN',
@@ -202,7 +210,7 @@ export default {
  getRecords: function(){
         this.button='Loading...';
         this.loadStatus='load';
-        axios.get('/pos/invoices', {params:this.parameters}).then(response => {
+        axios.get('/pos2/invoices', {params:this.parameters}).then(response => {
             if((response.status != undefined && response.status==200) && (response['data'].data.status==response['data'].data.statusmsg)){
             this.info = response['data'].data.info;
             this.totalRecord = response['data'].data.info;
@@ -244,12 +252,12 @@ export default {
 
   plotChart: function(){
       this.getColumns();
-      this.totalPlot();
       this.dailyFLows()
     },
+
   getColumns: function(){
-    if (this.selectedYear=='') {
-        this.selectedYear = new Date().getFullYear();
+    if (this.parameters.year=='') {
+        this.parameters.year = new Date().getFullYear();
     }else{
       this.years = [];
       const years = _.groupBy(this.info, info => info.date_created.substring(0, 4));
@@ -259,32 +267,6 @@ export default {
     }
  
   },
-  sortData: function(needle, record){
-      this.sortOrder('date_created');
-      var newRecord = []
-      for (let i = 0; i < record.length; i++) {
-        if (
-            record[i].date_created.toString().toLowerCase().search(needle.toString().toLowerCase())!=-1
-            ){
-          newRecord.push(record[i]);
-        }
-        }
-        console.log(newRecord)
-        return newRecord;
-        },
-
-      sortInclude: function(needle, record){
-      this.sortOrder('date_created');
-      var newRecord = []
-      for (let i = 0; i < record.length; i++) {
-        if (
-            record[i].date_created.toString().toLowerCase()==(needle.toString().toLowerCase())
-            ){
-          newRecord.push(record[i]);
-        }
-        }
-        return newRecord;
-        },
 
     sortOrder: function(column, record){
     try {
@@ -297,37 +279,61 @@ export default {
             return false;
         }
     },
-    totalPlot: function(){
-      this.chartOptions.total.title = "Invoiced";
-        var total = 0;
-        var counter = 0;
-        var data = this.sortInclude(this.todayDate, this.allSales);
-        for (let index = 0; index < data.length; index++) {
-                counter += 1;
-                total += parseFloat(this.allSales[index].unit_price);
+
+  sortData: function(needle, record){
+      this.sortOrder('date_created');
+      var newRecord = []
+      for (let i = 0; i < record.length; i++) {
+        if (
+            record[i].date_created.toString().toLowerCase().search(needle.toString().toLowerCase())!=-1
+            ){
+          newRecord.push(record[i]);
         }
-            this.totalPrice = total;
-            this.counter = counter;
-            // this.totalItems = this.selectionTotal;
+        }
+        return newRecord;
+        },
 
-    },
+      slicedBy: function(needle, record){
+      this.sortOrder('date_created');
+      var newRecord = []
+      for (let i = 0; i < record.length; i++) {
+        if (
+            record[i].date_created.toString().toLowerCase().startsWith(needle)
+            ){
+          newRecord.push(record[i]);
+        }
+        }
+        return newRecord;
+        },
 
+ 
     dailyFLows: function(){
-        this.chartDailyFLows=[];
-        var selectionTotal = 0;
-        this.chartDailyFLows.push(['Item', 'Amount']);
-        this.chartOptions.dailyFLows.title = "Daily Sales";
-              var data = this.sortInclude(this.todayDate, this.allSales);
-              const grouped = _.groupBy(data, info => info.item_name);
-              for (var key in grouped){
-              var total = 0;
-                for (let index = 0; index < grouped[key].length; index++) {
-                    selectionTotal += 1;
-                    total += parseFloat(this.allSales[index].amount);
-                }
-              this.chartDailyFLows.push([key.toString(), total])
+    this.chartDailyFLows=[];
+    this.selectionTotal = 0;
+    var todayPrice = 0;
+    var countTodayInvoice = 0;
+    this.chartDailyFLows.push(['Date', 'Total sales']);
+    this.chartOptions.dailyFLows.title = "";
+          var needle = this.parameters.year+'-'+this.parameters.month
+          var data = this.slicedBy(needle, this.info);
+          const grouped = _.groupBy(data, info => info.date_created);
+          grouped.sort
+          for (var key in grouped){
+          var total = 0;
+          for (let index = 0; index < grouped[key].length; index++) {
+              this.selectionTotal += 1;
+              total += parseFloat(data[index].totalPrice);
+              if (this.todayDate == key) {
+                countTodayInvoice += 1
+                todayPrice += parseFloat(data[index].totalPrice);
               }
-              this.totalItems = selectionTotal
+          }
+          var label = this.todayDate == key? "Today's Flow" : key.toString()
+          this.chartDailyFLows.push([label, total])
+          this.totalPrice = todayPrice;
+          this.totalItems = countTodayInvoice;
+          }
+
     },
 
 

@@ -32,6 +32,7 @@ use App\Http\Controllers\AccountPassportController;
 use App\Http\Controllers\SavingsController;
 use App\Http\Controllers\ChartsController;
 use App\Http\Controllers\PosController;
+use App\Http\Controllers\PosController2;
 use App\Http\Controllers\SalesItemsController;
 /*
 |--------------------------------------------------------------------------
@@ -261,9 +262,17 @@ Route::get('/app/pos/invoices', [PosController::class, 'list'])->name('pos_invoi
 Route::get('/app/pos/printinvoice', [PosController::class, 'invoice'])->name('pos_print_invoices');
 Route::post('/pos/create', [PosController::class, 'create'])->name('pos_create_request');
 Route::get('/pos/invoices', [PosController::class, 'listAll'])->name('pos_invoices_request');
-Route::get('/pos/sales', [PosController::class, 'listAllSales'])->name('pos_sales_request');
 Route::get('/pos/invoice', [PosController::class, 'get_invoice'])->name('pos_getinvoice_request');
 Route::get('/pos/printinvoice', [PosController::class, 'printinvoice'])->name('pos_print_invoices_request');
+
+// Pos 2
+Route::get('/app/pos2/portal', [PosController2::class, 'portal'])->name('pos2_portal');
+Route::get('/app/pos2/invoices', [PosController2::class, 'list'])->name('pos2_invoices');
+Route::get('/app/pos2/printinvoice', [PosController2::class, 'invoice'])->name('pos2_print_invoices');
+Route::post('/pos2/create', [PosController2::class, 'create'])->name('pos2_create_request');
+Route::get('/pos2/invoices', [PosController2::class, 'listAll'])->name('pos2_invoices_request');
+Route::get('/pos2/invoice', [PosController2::class, 'get_invoice'])->name('pos2_getinvoice_request');
+Route::get('/pos2/printinvoice', [PosController2::class, 'printinvoice'])->name('pos2_print_invoices_request');
 
 // Sales items
 Route::get('/app/salesitems/upload', [SalesItemsController::class, 'uploadBatch'])->name('upload_salesitems');
@@ -277,8 +286,8 @@ Route::post('/salesitems/update', [SalesItemsController::class, 'update_record']
 Route::get('/salesitems/manage/status', [SalesItemsController::class, 'manage_status'])->name('manage_status_salesitems_request');
 Route::delete('/salesitems/trash', [SalesItemsController::class, 'trash'])->name('trash_salesitems_request');
 
-
 });
+
 Route::get('/getroutes', [PageAccessController::class, 'getRoutes'])->name('get_all_routes');
 Route::get('/pagenotfound', [PageAccessController::class, 'pageNotFound'])->name('pageNotFound');
 Route::get('/noaccess', [PageAccessController::class, 'NoAccess'])->name('NoAccess');

@@ -32,7 +32,7 @@
         <div class="m-3">
                  <div class="text-center">
                      <figure>
-                     <img :src="userProfilePassport" class="rounded-circle" style="width:80px; height:80x;" alt="Passport">
+                     <img :src="userProfilePassport" class="rounded-circle" height="120" width="120" alt="Passport">
                     </figure>
                 </div>
         </div>
@@ -136,7 +136,7 @@ export default {
         errors: [],
         form_success: [],
         max_year: new Date().getFullYear() - 16,
-        userProfilePassport: '/assets/passports/avatar.png',
+        userProfilePassport: '/assets/icons/avatar.png',
         parameters:{
             yob: '',
             mob: '',

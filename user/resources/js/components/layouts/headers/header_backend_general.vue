@@ -23,10 +23,10 @@
         <li class="nav-item dropdown"><a href="#" data-bs-toggle="dropdown" role="button" aria-expanded="false" id="profileDrop" class="nav-link p-1 pe-1"><div class="dp-small"><img :src="userProfilePassport" alt=""></div></a>
          <ul class="dropdown-menu dropdown-menu-dark pt-3 pb-3" style="width:310px !important;" aria-labelledby="profileDrop" onclick="event.stopPropagation()">
             <li class="p-2">
-                 <div class="text-center">
-                     <figure>
-                     <img :src="userProfilePassport" class="rounded-circle" style="width:90px; height:90x;" alt="Passport">
-                    </figure>
+                 <div class="text-center w-100">
+                  <figure>
+                     <img :src="userProfilePassport" class="rounded-circle" width="150" height="150" alt="Passport"> <br clear="all/">
+                  </figure>
                     <p class="m-0 p-1 mb-1"><span v-text="usersession['lastname'] + ' ' + usersession['firstname'] +' '+ usersession['othername']"></span></p>
                     <p class="m-0 p-1 text-muted fs-6 border border-secondary rounded rounded-pill"><span v-text="usersession['email_one']"></span></p>
                 </div>
@@ -72,7 +72,7 @@ export default {
         usersession: [],
         displayName: '',
         changes: '',
-        userProfilePassport: '/assets/passports/avatar.png',
+        userProfilePassport: '/assets/icons/avatar.png',
         sidebarMenu: [
         ],
      

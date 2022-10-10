@@ -21,7 +21,7 @@
         <div class="collapse" id="drop3">
         <ul class="btn-toggle-nav ms-2 list-unstyled fw-normal pb-1 small">
         <li class="p-1">
-           <select v-model="selectedYear" class="form-control shadow-none" @change="plotChart">
+           <select v-model="parameters.year" class="form-control shadow-none" @change="plotChart">
                 <option value="" selected>Select</option>
                 <option v-for="(d, index) in years" :value="d" :key="index" v-text="'Year '+d"></option>
             </select>
@@ -43,7 +43,7 @@
         <div class="border rounded-3 p-1 pt-0 pb-0">
              <div class="row border-bottom m-0 p-0 pb-1 pt-1">
                   <div class="col-md-10">
-            <h6 class="m-0 pt-2 pb-2" v-text="chartOptions.total.header +' ('+selectedYear+')'"></h6> 
+            <h6 class="m-0 pt-2 pb-2" v-text="chartOptions.total.header +' ('+parameters.year+')'"></h6> 
           </div>
               <div class="col-md-2">
               </div>
@@ -52,7 +52,7 @@
         <div class="col-md-12">
               <h4 class="mt-3"> <span class="" v-text="counter"></span> <br/> <small class="fs-6">Total invoice</small></h4>
               <hr>
-              <h4 class="mt-4"> <span class="" v-text="formatter(totalPrice)"></span> <br/> <small class="fs-6">YTD</small> </h4>
+              <h4 class="mt-4"> <span class="" v-text="valueConverter(totalPrice)"></span> <br/> <small class="fs-6">YTD</small> </h4>
               <hr>
               <h4 class="mt-4"> <span class="" v-text="totalItems"></span> <br/> <small class="fs-6">Total item orders</small> </h4>
     </div>
@@ -64,18 +64,24 @@
         <div class="border rounded-3 p-1 pt-0 pb-0 m-0">
       <div class="row border-bottom m-0 p-0 pb-1 pt-1">
               <div class="col-md-8">
-            <h6 class="m-0 pt-2 pb-2" v-text="chartOptions.summary.header +' ('+selectedYear+')'"></h6> 
+            <h6 class="m-0 pt-2 pb-2" v-text="chartOptions.summary.header +' ('+parameters.year+')'"></h6> 
           </div>
               <div class="col-md-4">
               </div>
       </div>
        <div class="row overflow-hidden m-0 mt-2 mb-2">
         <div class="col-md-12">
+            <section v-if="info.length > 0">
             <GChart class="chart" 
-            type="ColumnChart" 
-            :data="chartSummary" 
-            :resizeDebounce="500"
-            :options="chartOptions.summary" />
+              type="ColumnChart" 
+              :data="chartSummary" 
+              :resizeDebounce="500"
+              :options="chartOptions.summary" />
+           </section>
+           <section v-else>
+            <p class="text-center text-white blinker">Fetching...</p>
+           </section>
+          
         </div>
       </div>
     </div>
@@ -89,7 +95,7 @@
         width: 99%;
         min-height: 280px;
     }
-/* #272953 */
+
 </style>
 <script>
 import { GChart } from 'vue-google-charts/legacy'
@@ -114,7 +120,11 @@ export default {
         errors: [],
         selectionTotal: 0,
         years: [],
-        selectedYear: '',
+        parameters:{
+            year: '',
+            month: '',
+            day: '',
+        },
         todayDate: '',
         totalPrice: 0,
         counter: 0,
@@ -181,19 +191,22 @@ export default {
       var month = m.toString().length===1? '0'+m.toString() : m.toString();
       var day = d.getDate().toString().length===1? '0'+d.getDate().toString() : d.getDate().toString()
       this.todayDate = d.getFullYear() + '-' + month + '-' +day;
-      this.selectedYear = d.getFullYear();
+      this.parameters.year = d.getFullYear()
+      this.parameters.month = month
+      this.parameters.day = day
     },
-      formatter: function(amount){
+    valueConverter: function(amount){
         var formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'NGN',
         })
         return formatter.format(amount);
     },
+
  getRecords: function(){
         this.button='Loading...';
         this.loadStatus='load';
-        axios.get('/pos/invoices', {params:this.parameters}).then(response => {
+        axios.get('/pos2/invoices', {params:this.parameters}).then(response => {
             if((response.status != undefined && response.status==200) && (response['data'].data.status==response['data'].data.statusmsg)){
             this.info = response['data'].data.info;
             this.totalRecord = response['data'].data.info;
@@ -239,8 +252,8 @@ export default {
       this.totalPlot();
     },
   getColumns: function(){
-    if (this.selectedYear=='') {
-        this.selectedYear = new Date().getFullYear();
+    if (this.parameters.year=='') {
+        this.parameters.year = new Date().getFullYear();
     }else{
       this.years = [];
       const years = _.groupBy(this.info, info => info.date_created.substring(0, 4));
@@ -260,7 +273,6 @@ export default {
           newRecord.push(record[i]);
         }
         }
-        console.log(newRecord)
         return newRecord;
         },
 
@@ -275,11 +287,12 @@ export default {
             return false;
         }
     },
+
     totalPlot: function(){
       this.chartOptions.total.title = "Invoiced";
         var total = 0;
         var counter = 0;
-        var data = this.sortData(this.selectedYear, this.info);
+        var data = this.sortData(this.parameters.year, this.info);
         for (let index = 0; index < data.length; index++) {
                 counter += 1;
                 total += parseFloat(this.info[index].totalPrice);
@@ -287,7 +300,6 @@ export default {
             this.totalPrice = total;
             this.counter = counter;
             this.totalItems = this.allSales.length;
-
     },
 
   summaryPlot: function(){
@@ -295,14 +307,14 @@ export default {
     this.selectionTotal = 0;
     this.chartSummary.push(['Month', 'Total sales']);
     this.chartOptions.summary.title = "Total sales by Months";
-          var data = this.sortData(this.selectedYear, this.info);
+          var data = this.sortData(this.parameters.year, this.info);
           const grouped = _.groupBy(data, info => info.date_created.substring(5, 7));
           for (var key in grouped){
           var total = 0;
-            for (let index = 0; index < grouped[key].length; index++) {
-                this.selectionTotal += 1;
-                total += parseFloat(this.info[index].totalPrice);
-            }
+          for (let index = 0; index < grouped[key].length; index++) {
+              this.selectionTotal += 1;
+              total += parseFloat(data[index].totalPrice);
+          }
           this.chartSummary.push([this.months[key].toString(), total])
           }
 

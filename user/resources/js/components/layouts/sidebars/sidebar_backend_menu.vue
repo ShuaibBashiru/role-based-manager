@@ -22,7 +22,7 @@
 
         <div class="row">
           <div class="col-2" role="button"><i class="bi bi-power me-1 ms-2"></i></div>
-          <div class="col-10 toggleHide" role="button"> <p> <a href="/app/logout"> Log out </a>  </p></div>
+          <div class="col-10 toggleHide" role="button"> <p> <a class="text-danger" href="/app/logout"> Log out </a>  </p></div>
         </div>
 
         </div>
@@ -59,14 +59,7 @@ export default {
         changes: '',
         menuList: [],
         sidebarMenu: [
-        {'id': 0, 'title':'Sales', 'info': [
-            {'id':1, 'menuName': 'Point of Sales', 'linkName':'sales/pos'}, 
-            {'id':2, 'menuName': 'Records', 'linkName':'sales/list'},
-            {'id':2, 'menuName': 'Create item', 'linkName':'sales/create'},
-            {'id':2, 'menuName': 'Upload items', 'linkName':'sales/upload'},
-            ],'tag':'', 'description':'', 'img':'', 'link':'', 'linkText':'', 'content':'', 'icon':'bi bi-shop', 'target':''
-          },
-
+          // Sample
           {'id': 1, 'title':'Account', 'info': [{'id':2, 'menuName': 'My profile', 'linkName': 'account/profile'}, {'id':2, 'menuName': 'Sign out', 'linkName': 'logout'}], 'tag':'', 'description':'', 'img':'', 'link':'', 'linkText':'', 'content':'', 'icon':'bi bi-person-circle', 'target':''},
         ],
      

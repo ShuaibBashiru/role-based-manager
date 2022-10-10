@@ -67,7 +67,7 @@
         </div>
     </div>
        <div class="col-md-3">
-        <span class="float-end" v-text="'Total: '+ formatter(parameters.totalPrice)"></span>
+        <span class="float-end" v-text="'Total: '+ valueConverter(parameters.totalPrice)"></span>
     </div>
 </div>
     <div class="row mt-1">
@@ -234,7 +234,7 @@ export default {
             this.disabled = false
    },
 
-    formatter: function(amount){
+    valueConverter: function(amount){
         var formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'NGN',

@@ -16,7 +16,7 @@
 
             <div class="row mt-2">
             <div class="col-md">
-            <p class="ms-0 text-muted mb-3">This is a personalized portal for some of your activities, you can navigate and interact to get more insights.</p>
+            <p class="ms-0 text-muted mb-3">This is a personalized activities dashboard, you can navigate and interact to get more insights.</p>
             </div>
             </div>
             <hr class="mt-1"/>
@@ -30,15 +30,14 @@
             </div>
             
       <!-- Chart -->
-      <div class="row">
+      <div class="row mt-3">
             <div class="col-md-12">
               <!-- Chart component here -->
                     <sales-chart />
-
             </div>
             </div>
 
-      <div class="row mt-3">
+        <div class="row mt-3">
             <div class="col-md-12">
               <!-- Chart component here -->
                     <!-- <users-chart /> -->

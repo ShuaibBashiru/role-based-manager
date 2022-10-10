@@ -110,7 +110,7 @@ export default {
         search: '',
         checks: [],
         statuses: [],
-        userProfilePassport: '/assets/passports/avatar.png',
+        userProfilePassport: '/assets/icons/avatar.png',
         parameters:{
             personal_id: '',
             id: '',

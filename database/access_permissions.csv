@@ -1,0 +1,176 @@
+id,routeLink,route_name,title,descriptions
+1,/,home,Home,User can view
+2,access/create,create_access_request,Create access,User can create access
+3,access/list,list_access_request,Read record,User can read record
+4,access/manage/status,manage_status_access_request,Update status,User can update status
+5,access/status/updatebatch,update_status_access_request,Update batch status,User can update batch status
+6,access/trash,trash_access_request,Delete record,User can delete record
+7,access/update,update_access_request,Update record,User can update record
+8,access/upload,upload_access_request,Upload record(s),User can upload record
+9,accessgroup/create,create_accessgroup_request,Create record,User can create record
+10,accessgroup/list,list_accessgroup_request,Read record,User can read record
+11,accessgroup/manage/status,manage_accessgroup_status_request,Update status,User can update status
+12,accessgroup/status/updatebatch,update_accessgroup_status_request,Update batch status,User can update batch status
+13,accessgroup/trash,trash_accessgroup_request,Delete record,User can delete record
+14,accessgroup/update,update_accessgroup_request,Update record,User can update record
+15,account/contactaddress/update,update_account_contact_request,Update record,User can update record
+16,account/create,create_account_request,Create record,User can create record
+17,account/dob/update,update_account_dob_request,Update record,User can update record
+18,account/email/update,update_account_email_request,Update record,User can update record
+19,account/gender/update,update_account_gender_request,Update record,User can update record
+20,account/list,list_account_request,Read record,User can read record
+21,account/manage/status,manage_account_status,Update status,User can update status
+22,account/name/update,update_account_name_request,Update record,User can update record
+23,account/passport,upload_account_passport,Account passport,User can upload passport
+24,account/phone/update,update_account_phone_request,Update record,User can update record
+25,account/status/updatebatch,update_account_status_request,Update batch status,User can update batch status
+26,account/trash,trash_account_request,Delete record,User can delete record
+27,admin/contactaddress/update,update_account_contact_request,,
+28,admin/create,create_account_request,,
+29,admin/dob/update,update_account_dob_request,,
+30,admin/email/update,update_account_email_request,,
+31,admin/gender/update,update_account_gender_request,,
+32,admin/list,list_account_request,,
+33,admin/manage/status,manage_account_status,,
+34,admin/name/update,update_account_name_request,,
+35,admin/passport,upload_admin_passport,Upload passport,User can upload passport
+36,admin/phone/update,update_account_phone_request,,
+37,admin/role/update,update_admin_role,Update record,User can update record
+38,admin/status/updatebatch,update_account_status_request,,
+39,admin/trash,trash_account_request,,
+40,admin/upload,upload_admin_request,Upload record(s),User can upload record
+41,adminmenu/create,create_adminmenu_request,Create record,User can create record
+42,adminmenu/list,list_adminmenu_request,Read record,User can read record
+43,adminmenu/manage/status,manage_status_adminmenu_request,Update status,User can update status
+44,adminmenu/menulist,menulist_adminmenu_request,,
+45,adminmenu/status/updatebatch,update_status_adminmenu_request,Update batch status,User can update batch status
+46,adminmenu/trash,trash_adminmenu_request,Delete record,User can delete record
+47,adminmenu/update,update_adminmenu_request,Update record,User can update record
+48,adminmenugroup/create,create_adminmenu_group_request,Create record,User can create record
+49,adminmenugroup/list,list_adminmenu_group_request,Read record,User can read record
+50,adminmenugroup/manage/status,manage_update_adminmenu_group_request,Update status,User can update status
+51,adminmenugroup/status/updatebatch,update_status_adminmenu_group_request,Update batch status,User can update batch status
+52,adminmenugroup/trash,trash_adminmenu_group_request,Delete record,User can delete record
+53,adminmenugroup/update,update_adminmenu_group_request,Update record,User can update record
+54,app/access/list,list_access,View record,User can view record
+55,app/access/manage/,manage_access,,
+56,app/access/upload,upload_access,Upload record(s),User can upload record
+57,app/accessgroup/list,list_accessgroup,Groups,User can view record
+58,app/accessgroup/manage/,manage_accessgroup,,
+59,app/account/create,create_account,Create record,User can create record
+60,app/account/edit/contactaddress/,edit_account_contact_addr,,
+61,app/account/edit/dob/,edit_account_dob,,
+62,app/account/edit/email/,edit_account_email,,
+63,app/account/edit/gender/,edit_account_gender,,
+64,app/account/edit/name/,edit_account_name,,
+65,app/account/edit/password/,edit_account_password,,
+66,app/account/edit/phone/,edit_account_phone,,
+67,app/account/manage/,manage_account,,
+68,app/account/profile,account_profile,My profile,Account profile
+69,app/account/profile/pdf/,pdf_account_profile,,
+70,app/admin/create,create_admin,Create record,User can create record
+71,app/admin/edit/contactaddress/,edit_admin_contact_addr,,
+72,app/admin/edit/dob/,edit_admin_dob,,
+73,app/admin/edit/email/,edit_admin_email,,
+74,app/admin/edit/gender/,edit_admin_gender,,
+75,app/admin/edit/name/,edit_admin_name,,
+76,app/admin/edit/password/,edit_admin_password,,
+77,app/admin/edit/phone/,edit_admin_phone,,
+78,app/admin/list,list_admin,View record,User can view record
+79,app/admin/manage/,manage_admin,,
+80,app/admin/profile/,admin_profile,,
+81,app/admin/profile/pdf/,pdf_admin_profile,,
+82,app/admin/upload,upload_admin,Upload record(s),User can upload record
+83,app/adminmenu/list,list_adminmenu,View record,User can view record
+84,app/adminmenu/manage/,manage_adminmenu,,
+85,app/adminmenugroup/list,list_adminmenugroup,Groups,User can view record
+86,app/adminmenugroup/manage/,manage_adminmenugroup,,
+87,app/dashboard,dashboard,Home,User can view dashboard
+88,app/logout,logout,,
+89,app/pos/invoices,pos_invoices,Invoices,User can view invoices
+90,app/pos/portal,pos_portal,Point of Sales,User can view point of sales
+91,app/pos/printinvoice,pos_print_invoice,Print invoice,User can print invoice
+92,app/pos2/invoices,pos2_invoices,Invoices,User can view invoices
+93,app/pos2/portal,pos2_portal,Point of Sales,User can view point of sales
+94,app/pos2/printinvoice,pos2_print_invoice,Print invoice,User can print invoice
+95,app/role/list,list_role,View record,User can view record
+96,app/role/manage/,manage_role,,
+97,app/rolepermission/,list_rolepermission,View record,User can view record
+98,app/rolepermission/manage/,manage_rolepermission,,
+99,app/salesitems/list,list_salesitems,View record,User can view sales items
+100,app/salesitems/manage/,manage_salesitems,Manage items,User can manage sales items
+101,app/salesitems/upload,upload_salesitems,Upload record,User can upload sales items
+102,app/user/create,create_user,Create record,User can create record
+103,app/user/edit/contactaddress/,edit_user_contact_addr,,
+104,app/user/edit/dob/,edit_user_dob,,
+105,app/user/edit/email/,edit_user_email,,
+106,app/user/edit/gender/,edit_user_gender,,
+107,app/user/edit/name/,edit_user_name,,
+108,app/user/edit/password/,edit_user_password,,
+109,app/user/edit/phone/,edit_user_phone,,
+110,app/user/list,list_user,View record,User can view record
+111,app/user/manage/,manage_user,,
+112,app/user/profile/,user_profile,,
+113,app/user/profile/pdf/,pdf_user_profile,,
+114,app/user/savings/pdf/,pdf_savings,,
+115,app/user/upload,upload_user,Upload record(s),User can upload record
+116,city/list,list_city,Read record,User can read record
+117,country/list,list_country,Read record,User can read record
+118,forgotpassword,forgotpassword,,
+119,genders/list,list_genders,Read record,User can read record
+120,getroutes,get_all_routes,,
+121,login,login_request,,
+122,noaccess,noaccess,Access check,User access check
+123,pagenotfound,pagenotfound,Page Not found,Page Not found
+124,password_reset,account_password_reset,,
+125,password/change,account_change_password,,
+126,password/new/,newpasswordlink,,
+127,pos/create,pos_create_request,User can post sales,User can post sales
+128,pos/invoice,pos_getinvoice_request,User can print an invoice,User can print an invoice
+129,pos/invoices,pos_invoices_request,Invoice,User can view invoices
+130,pos/printinvoice,pos_print_invoice_request,Print Invoices,User can print invoice
+131,pos2/create,pos2_create_request,User can post sales,User can post sales
+132,pos2/invoice,pos2_getinvoice_request,User can print an invoice,User can print an invoice
+133,pos2/invoices,pos2_invoices_request,Invoice,User can view invoices
+134,pos2/printinvoice,pos2_print_invoice_request,Print Invoices,User can print invoice
+135,role/create,create_role_request,Create record,User can create record
+136,role/list,list_role_request,Read record,User can read record
+137,role/manage/status,manage_role_status,Update status,User can update status
+138,role/status/updatebatch,update_role_status_request,Update batch status,User can update batch status
+139,role/trash,trash_role_request,Delete record,User can delete record
+140,role/update,update_role_request,Update record,User can update record
+141,rolepermission/assign,assign_rolepermission_request,,
+142,rolepermission/list,list_rolepermission_request,Read record,User can read record
+143,rolepermission/manage/status,manage_status_rolepermission_request,Update status,User can update status
+144,rolepermission/remove,remove_rolepermission_request,,
+145,rolepermission/sethomepage,sethomepage_request,Set home page,User can set role home page
+146,rolepermission/status/updatebatch,update_status_rolepermission_request,Update batch status,User can update batch status
+147,rolepermission/trash,trash_rolepermission_request,Delete record,User can delete record
+148,rolepermission/update,update_rolepermission_request,Update record,User can update record
+149,salesitems/create,create_salesitems_request,Create sales item,User can create sale item
+150,salesitems/list,list_salesitems_request,Read record,User can read record
+151,salesitems/manage/status,manage_status_salesitems_request,Manage items,User can manage sales items
+152,salesitems/status/updatebatch,update_status_salesitems_request,Update batch,User update batch
+153,salesitems/trash,trash_salesitems_request,Delete sales items,User can delete
+154,salesitems/update,update_salesitems_request,Update item,User can Update item
+155,salesitems/upload,upload_salesitems_request,Upload record,User can upload record
+156,signin,signin,,
+157,signup,signup,,
+158,signup-guide,signup_guide,Instruction,Sign up instruction
+159,signup-verify,signup_verify,,
+160,state/list,list_state,Read record,User can read record
+161,status/list,list_status,Read record,User can read record
+162,user/chart,list_user_chart,,
+163,user/contactaddress/update,update_user_contact_request,Update record,User can update record
+164,user/create,create_user_request,Create record,User can create record
+165,user/dob/update,update_user_dob_request,Update record,User can update record
+166,user/email/update,update_user_email_request,Update record,User can update record
+167,user/gender/update,update_user_gender_request,Update record,User can update record
+168,user/list,list_user_request,Read record,User can read record
+169,user/manage/status,manage_user_status,Update status,User can update status
+170,user/name/update,update_user_name_request,Update record,User can update record
+171,user/passport,upload_user_passport,Upload passport,User can upload passport
+172,user/phone/update,update_user_phone_request,Update record,User can update record
+173,user/status/updatebatch,update_user_status_request,Update batch status,User can update batch status
+174,user/trash,trash_user_request,Delete record,User can delete record
+175,user/upload,upload_user_request,Upload record(s),User can upload record

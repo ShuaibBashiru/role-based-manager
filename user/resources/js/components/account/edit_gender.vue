@@ -32,7 +32,7 @@
         <div class="m-3">
                  <div class="text-center">
                      <figure>
-                     <img :src="userProfilePassport" class="rounded-circle" style="width:80px; height:80x;" alt="Passport">
+                     <img :src="userProfilePassport" class="rounded-circle" height="120" width="120" alt="Passport">
                     </figure>
                 </div>
         </div>
@@ -117,7 +117,7 @@ export default {
         errors: [],
         form_success: [],
         genders: [],
-        userProfilePassport: '/assets/passports/avatar.png',
+        userProfilePassport: '/assets/icons/avatar.png',
         parameters:{
             gender_id: '',
             generated_id: '',

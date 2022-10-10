@@ -174,6 +174,12 @@ Vue.component('pos', require('./components/pos/portal.vue').default);
 Vue.component('printinvoice', require('./components/pos/printinvoice.vue').default);
 Vue.component('pos_record', require('./components/pos/record.vue').default);
 
+
+//POS2 controller
+Vue.component('pos2', require('./components/pos2/portal.vue').default);
+Vue.component('printinvoice2', require('./components/pos2/printinvoice.vue').default);
+Vue.component('pos_record2', require('./components/pos2/record.vue').default);
+
 Vue.component('no_access', require('./components/errors/no_access.vue').default);
 Vue.component('page_not_found', require('./components/errors/pageNotFound.vue').default);
 

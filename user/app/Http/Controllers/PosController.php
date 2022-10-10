@@ -12,38 +12,12 @@ use PDF;
 class PosController extends Controller
 {
     
-    public function manage($id){
-        $cookie_name = "manageUser";
-        $cookie_value = $id;
-        $id = base64_decode(base64_decode($id));
-        setcookie($cookie_name, $cookie_value, time() + (86400), "/");
-        $record = $this->record($id);
-        if ($record['status']=='success') {
-            $record = $record['info'];
-            return view('apps.pos.manage', compact('record'));
-        }else{
-            $message = json_encode("No record found");
-            return redirect()->route('list_pos')->with('message', json_encode($message));
-        }
-    }
-
     public function list(){
         return view('apps.pos.record');
     }
 
     public function portal(){
         return view('apps.pos.portal');
-    }
-
-    public function checkIfIdIsValid($data){
-        $query = PointOfSales::where('deleted_status', '=', '0')
-                                    ->where('personal_id', '=', $data['personal_id'])
-                                    ->get()->first();
-        if($query){
-            return true;
-        }else{
-            return false;
-        }
     }
 
 
@@ -181,17 +155,6 @@ class PosController extends Controller
             ];
             $dataToJson = new ToJsonResource($returnData);
             return $dataToJson;
-        }
-    }
-
-    public function checkIfRecordExist($data){
-        $query = PointOfSales::where('deleted_status', '=', '0')
-                                    ->where('item_id', '=', $data['item_id'])
-                                    ->get()->first();
-        if($query){
-            return true;                
-        }else{
-            return false;
         }
     }
 

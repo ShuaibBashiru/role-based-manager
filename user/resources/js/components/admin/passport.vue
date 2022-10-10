@@ -89,7 +89,7 @@ export default {
         validated: false,
         errors: [],
         form_success: [],
-        userProfilePassport: '/assets/passports/avatar.png',
+        userProfilePassport: '/assets/icons/avatar.png',
         parameters:{
             categoryId: 1,
             filename: '',

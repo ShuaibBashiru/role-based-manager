@@ -2,8 +2,7 @@
 <div class="">
     <b-overlay class="position-fixed w-100 h-100" :show="showOverlay" no-wrap spinner-variant="primary" rounded="sm" spinner-type="border" z-index="999999" />
 <div class="container-fluid">
-<hr/>
-<!-- Start receipt -->
+<!--  Receipt -->
 <div class="modal fade" id="printInvoiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="newRoleModalLabel" aria-hkeyden="true">
 <div class="modal-dialog ps-md-3 pe-md-3">
     <div class="modal-content">
@@ -86,7 +85,7 @@
         <tbody>
         <tr> 
             <td class="col-7"><small class="font-weight-bold">Total:</small></td>
-            <td class="col-5"><small class="font-weight-bold float-end" v-text="summary? formatter(summary.totalPrice):''"></small></td>
+            <td class="col-5"><small class="font-weight-bold float-end" v-text="summary? valueConverter(summary.totalPrice):''"></small></td>
         </tr>
         </tbody>
    </table>
@@ -193,7 +192,7 @@ export default {
           }
     },
 
-    formatter: function(amount){
+    valueConverter: function(amount){
         var formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'NGN',
